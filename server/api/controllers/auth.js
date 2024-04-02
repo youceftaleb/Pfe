@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 
 exports.registerProfessor = async (req, res) => {
     try {
+        // TODO: experience, qualifications, availability
         const { email, password, userName } = req.body;
 
         // ! form validation server side
@@ -82,7 +83,7 @@ exports.login = async (req, res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
             // create a token
             const token = jwt.sign(
-                { user_id: user._id },
+                { user_id: user._id, user_type: user?.experience ? "professor" : "parent" },
                 process.env.TOKEN_KEY
             );
             const { password, ...userWithoutPassword } = user._doc;
