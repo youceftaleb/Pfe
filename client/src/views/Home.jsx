@@ -1,11 +1,10 @@
-import { Footer, Hero, Navbar } from "../components";
+import { Footer, Hero } from "../components";
+import MainLayout from "../layout/MainLayout";
 function Home() {
   return (
-    <>
-      <Navbar />
+    <MainLayout>
       <Hero />
-      <Footer />
-    </>
+    </MainLayout>
   );
 }
 

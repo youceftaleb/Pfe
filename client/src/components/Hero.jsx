@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export function Hero() {
   return (
     <div
@@ -10,13 +12,28 @@ export function Hero() {
       <div className="hero-overlay bg-opacity-60"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
-          <p className="mb-5">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
-          <button className="btn btn-primary">Get Started</button>
+          <h5 className="mb-5 text-3xl">
+            Supportive learning that gets results.
+          </h5>
+          <p className="mb-5">Tell us more about yourself:</p>
+          <div className="flex justify-between">
+            <Link
+              to={"/signup/professor"}
+              className="card w-50 bg-primary shadow-xl cursor-pointer"
+            >
+              <div className="card-body">
+                <h2 className="card-title">I'm a Professor</h2>
+              </div>
+            </Link>
+            <Link
+              to={"/signup/parent"}
+              className="card w-50 bg-primary shadow-xl cursor-pointer"
+            >
+              <div className="card-body">
+                <h2 className="card-title">I'm a Parent</h2>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

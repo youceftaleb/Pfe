@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home, Login, Signup } from "./views";
+import { ParentForm, ProfessorForm } from "./components";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,20 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+    children: [
+      {
+        path: "",
+        element: <></>,
+      },
+      {
+        path: "professor",
+        element: <ProfessorForm />,
+      },
+      {
+        path: "parent",
+        element: <ParentForm />,
+      },
+    ],
   },
 ]);
 function App() {

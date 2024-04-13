@@ -5,12 +5,11 @@ const jwt = require("jsonwebtoken");
 
 exports.registerProfessor = async (req, res) => {
     try {
-        // TODO: experience, qualifications, availability
-        const { email, password, userName } = req.body;
+        const { email, password, userName, experience, qualifications, availability } = req.body;
 
         // ! form validation server side
         if (
-            !(email && password && userName)
+            !(email && password && userName && experience && qualifications && availability)
         ) {
             return res.status(400).send({ message: "all input are required :email, password, userName" });
         }
@@ -24,9 +23,8 @@ exports.registerProfessor = async (req, res) => {
         const encryptedPassword = await bcrypt.hash(password, 10);
         // * saving our new created instance
         const savedUser = await Professor.create({
-            email,
-            password: encryptedPassword,
-            userName,
+            ...req.body,
+            password: encryptedPassword
         });
         res.status(201).json({ message: "User created successfully", data: savedUser })
     } catch (err) {

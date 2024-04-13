@@ -5,7 +5,7 @@ exports.updateProfessor = async (req, res) => {
     try {
         if (req.user.user_type === "parent") return res.status(403).send({ message: "You are not a professor" })
         if (req.params.id === req.user.user_id) {
-            const user = await Professor.findByIdAndUpdate(req.params.id, { $set: req.body }, { //TODO: limit the modification
+            const user = await Professor.findByIdAndUpdate(req.params.id, { $set: req.body }, {
                 new: true,
                 useFindAndModify: false,
             });

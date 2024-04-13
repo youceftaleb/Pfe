@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const experienceSchema = new mongoose.Schema({
     position: {
         type: String,
@@ -85,7 +84,7 @@ const professorSchema = new mongoose.Schema({
     },
     experience: {
         type: [experienceSchema],
-        default:[],
+        default: [],
         required: true
     },
     qualifications: {

@@ -43,7 +43,9 @@ export function Navbar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <Link to={"/"} className="btn btn-ghost text-xl">
+          daisyUI
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1">
@@ -69,8 +71,8 @@ export function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link to={"/signup"} className="btn">
-          Sign in
+        <Link to={"/login"} className="btn">
+          Log in
         </Link>
       </div>
     </div>
