@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home, Login, Signup } from "./views";
-import { ParentForm, ProfessorForm } from "./components";
+import { ParentForm, PrivateRoute, ProfessorForm } from "./components";
+import ParentAccountLayout from "./layout/ParentAccountLayout";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,25 @@ export const router = createBrowserRouter([
       {
         path: "parent",
         element: <ParentForm />,
+      },
+    ],
+  },
+  {
+    path: "/parent/dashboard",
+    element: (
+      <PrivateRoute>
+        <ParentAccountLayout />
+      </PrivateRoute>
+    ),
+    errorElement:<h1>parent error</h1>,
+    children: [
+      {
+        path: "",
+        element: <h1>dashboard page</h1>,
+      },
+      {
+        path: "page2",
+        element: <h1>page 2</h1>,
       },
     ],
   },

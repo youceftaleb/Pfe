@@ -8,7 +8,8 @@ export const loginSchema = yup.object({
 export const registerProfessorSchema = yup.object({
     userName: yup.string().required('a user-name is required'),
     email: yup.string().email('please enter a valid email').required('please enter your email'),
-    password: yup.string().required("No password provided").min(8, "Password is too short - should be 8 chars minimus")
+    password: yup.string().required("No password provided").min(8, "Password is too short - should be 8 chars minimus"),
+    modules: yup.string().required("this field is required").matches("[a-zA-Z]+(,[a-zA-Z]+)*","regex error")
 })
 
 export const registerParentSchema = yup.object({

@@ -1,6 +1,18 @@
 import MainLayout from "../layout/MainLayout";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../helpers/validation";
+import { login } from "../services/auth";
 
 function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(loginSchema) });
+  const onSubmit = (data) => {
+    login({ ...data });
+  };
   return (
     <MainLayout>
       <div
@@ -13,7 +25,11 @@ function Login() {
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body">
+            <form
+              className="card-body"
+              noValidate
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -23,7 +39,11 @@ function Login() {
                   placeholder="email"
                   className="input input-bordered"
                   required
+                  {...register("email")}
                 />
+                {errors?.email ? (
+                  <p className="text-red-500">{errors.email.message}</p>
+                ) : null}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -34,15 +54,11 @@ function Login() {
                   placeholder="password"
                   className="input input-bordered"
                   required
+                  {...register("password")}
                 />
-                <label className="label">
-                  <a
-                    href="/"
-                    className="label-text-alt link link-hover hover:underline"
-                  >
-                    Forgot password?
-                  </a>
-                </label>
+                {errors?.password ? (
+                  <p className="text-red-500">{errors.password.message}</p>
+                ) : null}
               </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>

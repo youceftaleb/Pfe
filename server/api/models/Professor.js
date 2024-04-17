@@ -74,7 +74,7 @@ const professorSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    module: {
+    modules: {
         type: [String],
         required: true
     },

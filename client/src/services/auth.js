@@ -4,7 +4,7 @@ import { successNotification, errorNotification, infoNotification } from '../hel
 export const signUp = ({ userName, email, password }, type) => {
     if (type === "parent") {
         httpCommon
-            .post("/auth/register-parent", { userName, email, password })
+            .post("/auth/register/parent", { userName, email, password })
             .then(
                 res => {
                     if (res.status === 201) {
@@ -18,7 +18,12 @@ export const signUp = ({ userName, email, password }, type) => {
                     errorNotification(err.response.data.message)
                 }
             })
-    } else { }
+    } else {
+        httpCommon
+            .post("/auth/register/parent")
+            .then()
+            .catch()
+    }
 }
 
 export const login = ({ email, password }) => {
@@ -28,6 +33,9 @@ export const login = ({ email, password }) => {
             if (res.status === 200) {
                 localStorage.setItem("token", res.data.token);
                 successNotification(res.data.message)
+                setTimeout(() => {
+                    window.location = "/parent/dashboard" //TODO: change this after login professor
+                }, 3000);
             }
         })
         .catch(err => {

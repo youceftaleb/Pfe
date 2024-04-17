@@ -4,8 +4,8 @@ const AuthController = require('../controllers/auth')
 
 module.exports = () => {
     // * register
-    router.post('/register-prof', AuthController.registerProfessor)
-    router.post('/register-parent', AuthController.registerParent)
+    router.post('/register/professor', AuthController.registerProfessor)
+    router.post('/register/parent', AuthController.registerParent)
     // * login
     router.post('/login', AuthController.login)
     // * google auth
