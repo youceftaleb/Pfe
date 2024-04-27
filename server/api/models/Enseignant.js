@@ -47,7 +47,7 @@ const enseignantSchema = new mongoose.Schema({
         default: false
     },
     experience: {
-        type: number,
+        type: Number,
         required: true
     },
     CV: {
