@@ -34,7 +34,7 @@ const enseignantSchema = new mongoose.Schema({
         type: String,
         default: 'http://dergipark.org.tr/assets/app/images/buddy_sample.png'
     },
-    rating: {
+    avis: {
         type: Number,
         default: 0,
     },
