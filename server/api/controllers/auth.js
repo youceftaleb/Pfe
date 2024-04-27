@@ -1,29 +1,29 @@
 const Parent = require('../models/Parent')
-const Professor = require('../models/Professor')
+const Enseignant = require('../models/Enseignant')
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-exports.registerProfessor = async (req, res) => {
+exports.registerEnseignant = async (req, res) => {
     try {
-        const { email, password, userName, experience, qualifications, availability } = req.body;
+        const { email, password, userName, experience, modules, availability, CV } = req.body;
 
         // ! form validation server side
         if (
-            !(email && password && userName && experience && qualifications && availability)
+            !(email && password && userName && experience && availability && modules && CV) //TODO: handle CV file
         ) {
-            return res.status(400).send({ message: "all input are required :email, password, userName" });
+            return res.status(400).send({ message: "all input are required" });
         }
 
         // ? does user already exist ?
-        if (await Professor.findOne({ email }) || await Parent.findOne({ email })) {
+        if (await Enseignant.findOne({ email }) || await Parent.findOne({ email })) {
             return res.status(409).send({ message: "User ALeready exists, Please login" });
         }
 
         // ! Encrypt user password
         const encryptedPassword = await bcrypt.hash(password, 10);
         // * saving our new created instance
-        const savedUser = await Professor.create({
-            ...req.body,
+        const savedUser = await Enseignant.create({
+            ...req.body, //TODO: modify to handle CV
             password: encryptedPassword
         });
         res.status(201).json({ message: "User created successfully", data: savedUser })
@@ -37,16 +37,12 @@ exports.registerParent = async (req, res) => {
         const { email, password, userName } = req.body;
 
         // ! form validation server side
-        if (
-            !(email && password && userName)
-        ) {
-            return res.status(400).send({
-                message: "all input are required {\n\temail\n\tpassword\n\tuserName\n}"
-            });
+        if (!(email && password && userName)) {
+            return res.status(400).send({ message: "all input are required" });
         }
 
         // ? does user already exist ?
-        if (await Professor.findOne({ email }) || await Parent.findOne({ email })) {
+        if (await Enseignant.findOne({ email }) || await Parent.findOne({ email })) {
             return res.status(409).send({ message: "User ALeready exists, Please login" });
         }
 
@@ -64,7 +60,7 @@ exports.registerParent = async (req, res) => {
     }
 }
 
-/// login a user
+// login a user
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -75,13 +71,16 @@ exports.login = async (req, res) => {
         // check if user exists in our database
         let user = await Parent.findOne({ email });
         if (!user) {
-            user = await Professor.findOne({ email });
+            user = await Enseignant.findOne({ email });
+            if (user && user?.activated === false) {
+                return res.status(403).send({ message: "Admin hasn't activated your account yet" })
+            }
         }
         if (user?.fromGoogle) return res.status(409).send({ message: "you are signed up with a gmail account please sign in with google" })
         if (user && (await bcrypt.compare(password, user.password))) {
             // create a token
             const token = jwt.sign(
-                { user_id: user._id, user_type: user?.experience ? "professor" : "parent" },
+                { user_id: user._id, user_type: user?.experience ? "enseignant" : "parent" },
                 process.env.TOKEN_KEY
             );
             const { password, ...userWithoutPassword } = user._doc;
@@ -99,7 +98,7 @@ exports.login = async (req, res) => {
 exports.googleAuth = async (req, res) => {
     try {
         let user = await Parent.findOne({ email: req.body.email });
-        if (!user) await Professor.findOne({ email: req.body.email })
+        if (!user) await Enseignant.findOne({ email: req.body.email })
         if (user) {
             const token = jwt.sign({ user_id: user._id }, process.env.TOKEN_KEY);
             res.status(200).send({ message: 'logged in successfully', data: user._doc, token })
