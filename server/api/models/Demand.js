@@ -5,7 +5,7 @@ const demandSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    professorId: {
+    enseignantId: {
         type: String,
         required: true
     },
