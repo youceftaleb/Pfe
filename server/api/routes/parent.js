@@ -11,7 +11,7 @@ module.exports = () => {
     // delete
     // router.delete('/:id', checkLogin, ProfessorController.deleteUser)
     // get
-    router.get('/:id', ProfessorController.getUser)
+    // router.get('/:id', ProfessorController.getUser)
 
     return router;
 }

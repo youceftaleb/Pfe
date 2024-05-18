@@ -5,15 +5,13 @@ const jwt = require("jsonwebtoken");
 
 exports.registerEnseignant = async (req, res) => {
     try {
-        const { email, password, userName, experience, modules, availability, CV } = req.body;
-
+        const { email, password, userName, experience, modules, availability, CV, identity } = req.body;
         // ! form validation server side
         if (
-            !(email && password && userName && experience && availability && modules && CV) //TODO: handle CV file
+            !(email && password && userName && experience && availability && modules && CV && identity) //TODO: handle CV file
         ) {
             return res.status(400).send({ message: "all input are required" });
         }
-
         // ? does user already exist ?
         if (await Enseignant.findOne({ email }) || await Parent.findOne({ email })) {
             return res.status(409).send({ message: "User ALeready exists, Please login" });
@@ -79,14 +77,15 @@ exports.login = async (req, res) => {
         if (user?.fromGoogle) return res.status(409).send({ message: "you are signed up with a gmail account please sign in with google" })
         if (user && (await bcrypt.compare(password, user.password))) {
             // create a token
+            const type = user?.experience ? "enseignant" : "parent"
             const token = jwt.sign(
-                { user_id: user._id, user_type: user?.experience ? "enseignant" : "parent" },
+                { user_id: user._id, user_type: type },
                 process.env.TOKEN_KEY
             );
             const { password, ...userWithoutPassword } = user._doc;
 
             // response
-            res.status(200).send({ message: 'logged in successfully', data: userWithoutPassword, token })
+            res.status(200).send({ message: 'logged in successfully', data: userWithoutPassword, token, type })
         } else {
             res.status(409).send({ message: "incorrect email or password" });
         }

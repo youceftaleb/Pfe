@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 
-const availabilitySchema = new mongoose.Schema({
-    day: {
+const disponibiliteSchema = new mongoose.Schema({
+    dayName: {
         type: String,
         required: true
     },
-    start_time: {
+    startTime: {
         type: String,
         required: true
     },
-    end_time: {
+    endTime: {
         type: String,
         required: true
     }
@@ -54,8 +54,12 @@ const enseignantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    availability: {
-        type: [availabilitySchema],
+    identite: {
+        type: String,
+        required: true
+    },
+    disponibilite: {
+        type: [disponibiliteSchema],
         default: [],
         required: true
     },

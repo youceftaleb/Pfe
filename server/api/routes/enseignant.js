@@ -8,10 +8,6 @@ module.exports = () => {
     router.get('/', EnseignantController.getProfessors)
     // update
     router.put('/:id', checkLogin, EnseignantController.updateEnseignant)
-    // delete
-    router.delete('/:id', checkLogin, EnseignantController.deleteUser)
-    // get
-    router.get('/:id', EnseignantController.getUser)
 
     return router;
 }
