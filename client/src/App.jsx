@@ -1,6 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home, Login, Signup } from "./views";
-import { ParentForm, PrivateRoute, EnseignantForm } from "./components";
+import {
+  ParentForm,
+  PrivateRoute,
+  EnseignantForm,
+  UsersTable,
+} from "./components";
 import EnseignantAccountLayout from "./layout/EnseignantAccountLayout";
 import Enseignant from "./views/Enseignant";
 import FilterPage from "./views/FilterPage";
@@ -42,6 +47,16 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     errorElement: <div>dashboard error</div>,
+    children: [
+      {
+        path: "enseignants",
+        element: <UsersTable />,
+      },
+      {
+        path: "parents",
+        element: <UsersTable />,
+      },
+    ],
   },
   {
     path: "/parent/dashboard",

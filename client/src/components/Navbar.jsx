@@ -5,7 +5,7 @@ export function Navbar() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <div className="navbar bg-base-100 sticky top-0 z-[5]">
+    <nav className="navbar bg-base-100 sticky top-0 z-[5]">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -94,6 +94,6 @@ export function Navbar() {
           </Link>
         </div>
       )}
-    </div>
+    </nav>
   );
 }
