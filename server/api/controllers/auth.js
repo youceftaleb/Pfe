@@ -1,3 +1,4 @@
+const Admin = require('../models/Administrateur')
 const Parent = require('../models/Parent')
 const Enseignant = require('../models/Enseignant')
 const bcrypt = require("bcryptjs");
@@ -67,17 +68,20 @@ exports.login = async (req, res) => {
             return res.status(400).send({ message: "All input are required" });
         }
         // check if user exists in our database
-        let user = await Parent.findOne({ email });
+        let user = await Admin.findOne({ email });
         if (!user) {
-            user = await Enseignant.findOne({ email });
-            if (user && user?.activated === false) {
-                return res.status(403).send({ message: "Admin hasn't activated your account yet" })
+            user = await Parent.findOne({ email });
+            if (!user) {
+                user = await Enseignant.findOne({ email });
+                if (!user) return res.status(404).send({ message: "Utilisateur n'existe pas svp creer un compte" })
+                if (user?.activated === false) {
+                    return res.status(403).send({ message: "Admin hasn't activated your account yet" })
+                }
             }
         }
-        if (user?.fromGoogle) return res.status(409).send({ message: "you are signed up with a gmail account please sign in with google" })
         if (user && (await bcrypt.compare(password, user.password))) {
             // create a token
-            const type = user?.experience ? "enseignant" : "parent"
+            const type = user?.experience ? "enseignant" : user?.userName ? "parent" : "admin"
             const token = jwt.sign(
                 { user_id: user._id, user_type: type },
                 process.env.TOKEN_KEY

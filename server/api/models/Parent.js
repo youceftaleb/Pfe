@@ -17,10 +17,6 @@ const parentSchema = new mongoose.Schema({
     profilePic: {
         type: String,
         default: 'http://dergipark.org.tr/assets/app/images/buddy_sample.png'
-    },
-    fromGoogle: {
-        type: Boolean,
-        default: false
     }
 }, { timestamps: true });
 

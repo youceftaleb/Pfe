@@ -42,10 +42,6 @@ const enseignantSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    fromGoogle: {
-        type: Boolean,
-        default: false
-    },
     experience: {
         type: Number,
         required: true
@@ -62,6 +58,19 @@ const enseignantSchema = new mongoose.Schema({
         type: [disponibiliteSchema],
         default: [],
         required: true
+    },
+    adresse: {
+        wilaya: {
+            type: String,
+            required: true
+        },
+        ville: {
+            type: String,
+            required: true
+        },
+        adresse: {
+            type: String,
+        }
     },
     activated: {
         type: Boolean,
