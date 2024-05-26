@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userReducer";
 export function Navbar() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <div className="navbar bg-base-100 sticky top-0 z-[5]">
       <div className="navbar-start">
@@ -44,7 +48,7 @@ export function Navbar() {
           </ul>
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
-          daisyUI
+         <span className="text-orange-600 font-bold text-3xl">O</span>ustadi
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex ">
@@ -70,11 +74,26 @@ export function Navbar() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
-        <Link to={"/login"} className="btn">
-          Log in
-        </Link>
-      </div>
+      {currentUser ? (
+        <div
+          onClick={() => {
+            dispatch(logout());
+            localStorage.removeItem("token");
+            window.location = "/";
+          }}
+          className="avatar navbar-end"
+        >
+          <div className="w-10 rounded">
+            <img src={currentUser.profilePic} />
+          </div>
+        </div>
+      ) : (
+        <div className="navbar-end">
+          <Link to={"/login"} className="btn">
+            Log in
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

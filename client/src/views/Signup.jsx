@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
+import background from "../assets/kenny-eliason-zFSo6bnZJTw-unsplash.jpg";
 
 const Signup = () => {
   return (
@@ -8,8 +9,7 @@ const Signup = () => {
       <div
         className="hero min-h-screen bg-base-200 bg-opacity-60"
         style={{
-          backgroundImage:
-            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
+          backgroundImage: `url(${background})`,
         }}
       >
         <div className="hero-overlay bg-opacity-60"></div>

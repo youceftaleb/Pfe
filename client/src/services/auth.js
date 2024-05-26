@@ -1,47 +1,64 @@
 import httpCommon from '../utils/http-common'
 import { successNotification, errorNotification, infoNotification } from '../helpers/notifications'
+import { loginSuccess } from '../redux/userReducer'
 
-export const signUp = ({ userName, email, password }, type) => {
-    if (type === "parent") {
-        httpCommon
-            .post("/auth/register/parent", { userName, email, password })
-            .then(
-                res => {
-                    if (res.status === 201) {
-                        successNotification(res.data.message)
-                    }
-                })
-            .catch(err => {
-                if (err.response.status === 409) {
-                    infoNotification(err.response.data.message)
-                } else {
-                    errorNotification(err.response.data.message)
+export const signUpParent = ({ userName, email, password }) => {
+    httpCommon
+        .post("/auth/register/parent", { userName, email, password })
+        .then(
+            res => {
+                if (res.status === 201) {
+                    successNotification(res.data.message)
                 }
             })
-    } else {
-        httpCommon
-            .post("/auth/register/parent")
-            .then()
-            .catch()
-    }
+        .catch(err => {
+            if (err.response.status === 409) {
+                infoNotification(err.response.data.message)
+            } else {
+                errorNotification(err.response.data.message)
+            }
+        })
 }
 
-export const login = ({ email, password }) => {
+export const signUpEnseignant = ({ email, password, userName, CV, days, experience, identity, modules }) => {
+    httpCommon
+        .post("/auth/register/enseignant", { email, password, userName, CV, experience, modules, identity, availability: days })
+        .then(res => { if (res.status === 201) { successNotification(res.data.message) } })
+        .catch(err => {
+            if (err.response.status === 409) {
+                console.log(err);
+                infoNotification(err.response.data.message)
+            } else {
+                errorNotification(err.response.data.message)
+            }
+        })
+}
+
+export const login = ({ email, password }, dispatch) => {
     httpCommon
         .post("/auth/login", { email, password })
         .then(res => {
             if (res.status === 200) {
                 localStorage.setItem("token", res.data.token);
+                localStorage.setItem("user_type", res.data.type)
                 successNotification(res.data.message)
+                dispatch(loginSuccess(res.data.data))
                 setTimeout(() => {
-                    window.location = "/parent/dashboard" //TODO: change this after login professor
+                    switch (res.data.type) {
+                        case "parent":
+                            window.location = "/parent/dashboard"
+                            break;
+                        case "enseignant":
+                            window.location = "/enseignant/dashboard"
+                            break;
+                        case "admin":
+                            window.location = "/admin/dashboard"
+                            break;
+                    }
                 }, 3000);
             }
         })
         .catch(err => {
             errorNotification(err.response.data.message)
         })
-
-
-
 }

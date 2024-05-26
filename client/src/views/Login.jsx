@@ -3,24 +3,24 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../helpers/validation";
 import { login } from "../services/auth";
+import { useDispatch } from "react-redux";
+import background from "../assets/kenny-eliason-zFSo6bnZJTw-unsplash.jpg";
 
 function Login() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
   const onSubmit = (data) => {
-    login({ ...data });
+    login({ ...data }, dispatch);
   };
   return (
     <MainLayout>
       <div
         className="hero min-h-screen bg-base-200 bg-opacity-60"
-        style={{
-          backgroundImage:
-            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
-        }}
+        style={{ backgroundImage: `url(${background})` }}
       >
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content flex-col lg:flex-row-reverse">

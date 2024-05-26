@@ -1,13 +1,12 @@
-import React from "react";
-import { Drawer } from "../components";
-import { Outlet } from "react-router-dom";
+import { Navbar } from "../components";
+import FilterPage from "../views/FilterPage";
 
-const ParentAccountLayout = () => {
+const ParentAccountLayout = ({ children }) => {
   return (
-    <Drawer>
-      {/* <Navbar /> */}
-      <Outlet />
-    </Drawer>
+    <>
+      <Navbar />
+      {children}
+    </>
   );
 };
 

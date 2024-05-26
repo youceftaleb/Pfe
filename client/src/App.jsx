@@ -1,13 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home, Login, Signup } from "./views";
-import { ParentForm, PrivateRoute, ProfessorForm } from "./components";
-import ParentAccountLayout from "./layout/ParentAccountLayout";
+import { ParentForm, PrivateRoute, EnseignantForm } from "./components";
+import EnseignantAccountLayout from "./layout/EnseignantAccountLayout";
+import Enseignant from "./views/Enseignant";
+import FilterPage from "./views/FilterPage";
+import AdminLayout from "./layout/AdminLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    errorElement: <div>error</div>,
+    errorElement: <div>Home error</div>,
   },
   {
     path: "/login",
@@ -22,8 +25,8 @@ export const router = createBrowserRouter([
         element: <></>,
       },
       {
-        path: "professor",
-        element: <ProfessorForm />,
+        path: "enseignant",
+        element: <EnseignantForm />,
       },
       {
         path: "parent",
@@ -32,23 +35,34 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/parent/dashboard",
+    path: "/admin/dashboard",
     element: (
-      <PrivateRoute>
-        <ParentAccountLayout />
+      <PrivateRoute expect="admin">
+        <AdminLayout />
       </PrivateRoute>
     ),
-    errorElement:<h1>parent error</h1>,
-    children: [
-      {
-        path: "",
-        element: <h1>dashboard page</h1>,
-      },
-      {
-        path: "page2",
-        element: <h1>page 2</h1>,
-      },
-    ],
+    errorElement: <div>dashboard error</div>,
+  },
+  {
+    path: "/parent/dashboard",
+    element: (
+      <PrivateRoute expect="parent">
+        <FilterPage />
+      </PrivateRoute>
+    ),
+    errorElement: <div>dashboard error</div>,
+  },
+  {
+    path: "/enseignant/dashboard",
+    element: (
+      <PrivateRoute expect="enseignant">
+        <EnseignantAccountLayout />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/enseignant/:id",
+    element: <Enseignant />,
   },
 ]);
 function App() {

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerParentSchema } from "../helpers/validation";
-import { signUp } from "../services/auth";
+import { signUpParent } from "../services/auth";
 
 export const ParentForm = () => {
   const {
@@ -11,7 +11,7 @@ export const ParentForm = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(registerParentSchema) });
   const onSubmit = (data) => {
-    signUp({ ...data }, "parent");
+    signUpParent({ ...data });
   };
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)} className="card-body">
