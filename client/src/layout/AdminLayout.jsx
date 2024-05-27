@@ -1,5 +1,8 @@
 import { Outlet, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userReducer";
 const AdminLayout = () => {
+  const dispatch = useDispatch();
   return (
     <>
       <nav className="navbar bg-slate-200 sticky top-0 z-[5]">
@@ -10,7 +13,17 @@ const AdminLayout = () => {
           </div>
         </div>
         <div className="navbar-end">
-          <button className="btn btn-error">Logout</button>
+          <button
+            onClick={() => {
+              dispatch(logout());
+              localStorage.removeItem("token");
+              localStorage.removeItem("user_type");
+              window.location = "/";
+            }}
+            className="btn btn-error"
+          >
+            Logout
+          </button>
         </div>
       </nav>
       <main className="flex flex-grow">

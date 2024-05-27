@@ -79,6 +79,7 @@ export function Navbar() {
           onClick={() => {
             dispatch(logout());
             localStorage.removeItem("token");
+            localStorage.removeItem("user_type");
             window.location = "/";
           }}
           className="avatar navbar-end"

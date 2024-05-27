@@ -1,6 +1,6 @@
 import httpCommon from '../utils/http-common'
 import { successNotification, errorNotification, infoNotification } from '../helpers/notifications'
-import { loginSuccess } from '../redux/userReducer'
+import { loginStart, loginSuccess } from '../redux/userReducer'
 
 export const signUpParent = ({ userName, email, password }) => {
     httpCommon
@@ -35,6 +35,7 @@ export const signUpEnseignant = ({ email, password, userName, CV, days, experien
 }
 
 export const login = ({ email, password }, dispatch) => {
+    dispatch(loginStart())
     httpCommon
         .post("/auth/login", { email, password })
         .then(res => {
