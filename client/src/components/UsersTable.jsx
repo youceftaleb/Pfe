@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 export const UsersTable = () => {
   const [userToDelete, setUserToDelete] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const toggleActiveAccount = (id) => {
     httpCommon
       .put(`/admin/active/${id}`)
@@ -43,7 +42,7 @@ export const UsersTable = () => {
     }
   }, [users]);
   return (
-    <div className="m-7 flex justify-center w-full">
+    <div className="p-3 w-full">
       <table className="table">
         <thead>
           <tr>
@@ -56,7 +55,6 @@ export const UsersTable = () => {
                 <th>Avis</th>
                 <th>CV</th>
                 <th>Piece d'indentite</th>
-                <th>Adresse</th>
               </>
             )}
             <th>Options</th>
@@ -72,16 +70,16 @@ export const UsersTable = () => {
                   <td>{obj.userName}</td>
                   <td>{obj.email}</td>
                   <td>
+                    
                     <button
                       onClick={() => {
-                        setShowModal(!showModal);
+                        document.getElementById("my_modal_1").showModal();
                         setUserToDelete(obj._id);
                       }}
                       className="btn btn-error"
                     >
                       Supprimer
                     </button>
-                    <button className="btn btn-primary">Modifier</button>
                   </td>
                 </tr>
               ))
@@ -114,12 +112,7 @@ export const UsersTable = () => {
                       ouvrir -&gt;
                     </a>
                   </td>
-                  <td>
-                    {obj?.adresse?.wilaya +
-                      obj?.adresse?.ville +
-                      obj?.adresse?.adresse}
-                  </td>
-                  <td>
+                  <td className="grid grid-rows-1 grid-cols-3 gap-2">
                     {obj.activated ? (
                       <button
                         onClick={() => toggleActiveAccount(obj._id)}
@@ -137,7 +130,7 @@ export const UsersTable = () => {
                     )}
                     <button
                       onClick={() => {
-                        setShowModal(!showModal);
+                        document.getElementById("my_modal_1").showModal();
                         setUserToDelete(obj._id);
                       }}
                       className="btn btn-error"
@@ -152,32 +145,27 @@ export const UsersTable = () => {
         </tbody>
       </table>
 
-      <div
-        className={
-          "absolute top-1/3 h-1/3 w-1/3 right-1/3 bg-slate-800 rounded-2xl " +
-          (showModal || "hidden")
-        }
-      >
-        <h2 className="text-white text-3xl m-auto w-fit h-full py-10">
-          supprimer utilisateur ?
-        </h2>
-        <button
-          onClick={() => setShowModal(!showModal)}
-          className="btn btn-accent bottom-2 left-2 absolute"
-        >
-          Annuler
-        </button>
-        <button
-          onClick={() => {
-            deleteUser(userToDelete);
-            setUserToDelete(null);
-            setShowModal(!showModal);
-          }}
-          className="btn btn-error bottom-2 right-2 absolute"
-        >
-          supprimer
-        </button>
-      </div>
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h2 className="text-3xl m-auto w-fit py-10">
+            supprimer utilisateur ?
+          </h2>
+          <div className="modal-action">
+            <form method="dialog" className="w-full flex justify-between">
+              <button className="btn btn-accent ">Annuler</button>
+              <button
+                onClick={() => {
+                  deleteUser(userToDelete);
+                  setUserToDelete(null);
+                }}
+                className="btn btn-error"
+              >
+                supprimer
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
