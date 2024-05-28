@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import httpCommon from "../utils/http-common";
 import { successNotification } from "../helpers/notifications";
+import { Link } from "react-router-dom";
 
 export const UsersTable = () => {
   const [userToDelete, setUserToDelete] = useState(null);
@@ -88,7 +89,9 @@ export const UsersTable = () => {
             ? users.map((obj, index) => (
                 <tr className="hover" key={index}>
                   <td>
-                    <img src={obj.profilePic} alt={obj.userName} />
+                    <Link to={`/admin/dashboard/enseignants/${obj._id}`}>
+                      <img src={obj.profilePic} alt={obj.userName} />
+                    </Link>
                   </td>
                   <td>{obj.userName}</td>
                   <td>{obj.email}</td>
