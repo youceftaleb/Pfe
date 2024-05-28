@@ -15,6 +15,17 @@ const disponibiliteSchema = new mongoose.Schema({
     }
 });
 
+const CourSoutienScolaire = new mongoose.Schema({
+    description: {
+        type: String,
+        required: true
+    },
+    prix: {
+        type: Number,
+        required: true
+    }
+})
+
 const enseignantSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -71,6 +82,10 @@ const enseignantSchema = new mongoose.Schema({
         adresse: {
             type: String,
         }
+    },
+    cours: {
+        type: [CourSoutienScolaire],
+        default: [],
     },
     activated: {
         type: Boolean,
