@@ -1,7 +1,23 @@
 import { useEffect, useState } from "react";
 import httpCommon from "../utils/http-common";
+import { successNotification } from "../helpers/notifications";
 
 export const UsersTable = () => {
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const toggleActiveAccount = (id) => {
+    httpCommon
+      .put(`/admin/active/${id}`)
+      .catch((err) => console.log(err.message));
+  };
+  const deleteUser = (id) => {
+    httpCommon
+      .delete(`/admin/delete/${id}`)
+      .then((res) => {
+        successNotification(res.data.message);
+      })
+      .catch((err) => console.log(err.message));
+  };
   const type = window.location.pathname.split("/").pop();
   const [users, setUsers] = useState([]);
   useEffect(() => {
@@ -22,7 +38,7 @@ export const UsersTable = () => {
             setUsers(res.data.data);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err.message));
     }
   }, [users]);
   return (
@@ -31,18 +47,18 @@ export const UsersTable = () => {
         <thead>
           <tr>
             <th>Photo profil</th>
-            <th>user-name</th>
-            <th>email</th>
+            <th>Nom d'utilisateur</th>
+            <th>Email</th>
 
             {type === "enseignants" && (
               <>
-                <th>avis</th>
+                <th>Avis</th>
                 <th>CV</th>
-                <th>piece d'indentite</th>
+                <th>Piece d'indentite</th>
                 <th>Adresse</th>
               </>
             )}
-            <th>options</th>
+            <th>Options</th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +71,15 @@ export const UsersTable = () => {
                   <td>{obj.userName}</td>
                   <td>{obj.email}</td>
                   <td>
-                    <button className="btn btn-error">Supprimer</button>
+                    <button
+                      onClick={() => {
+                        setShowModal(!showModal);
+                        setUserToDelete(obj._id);
+                      }}
+                      className="btn btn-error"
+                    >
+                      Supprimer
+                    </button>
                     <button className="btn btn-primary">Modifier</button>
                   </td>
                 </tr>
@@ -88,17 +112,35 @@ export const UsersTable = () => {
                     </a>
                   </td>
                   <td>
-                    {obj.adresse.wilaya +
-                      obj.adresse.ville +
-                      obj.adresse.adresse}
+                    {obj?.adresse?.wilaya +
+                      obj?.adresse?.ville +
+                      obj?.adresse?.adresse}
                   </td>
                   <td>
                     {obj.activated ? (
-                      <button className="btn btn-warning">Desactiver</button>
+                      <button
+                        onClick={() => toggleActiveAccount(obj._id)}
+                        className="btn btn-warning"
+                      >
+                        Desactiver
+                      </button>
                     ) : (
-                      <button className="btn btn-success">Activer</button>
+                      <button
+                        onClick={() => toggleActiveAccount(obj._id)}
+                        className="btn btn-success"
+                      >
+                        Activer
+                      </button>
                     )}
-                    <button className="btn btn-error">Supprimer</button>
+                    <button
+                      onClick={() => {
+                        setShowModal(!showModal);
+                        setUserToDelete(obj._id);
+                      }}
+                      className="btn btn-error"
+                    >
+                      Supprimer
+                    </button>
                     <button className="btn btn-primary">Modifier</button>
                   </td>
                 </tr>
@@ -106,6 +148,33 @@ export const UsersTable = () => {
             : null}
         </tbody>
       </table>
+
+      <div
+        className={
+          "absolute top-1/3 h-1/3 w-1/3 right-1/3 bg-slate-800 rounded-2xl " +
+          (showModal || "hidden")
+        }
+      >
+        <h2 className="text-white text-3xl m-auto w-fit h-full py-10">
+          supprimer utilisateur ?
+        </h2>
+        <button
+          onClick={() => setShowModal(!showModal)}
+          className="btn btn-accent bottom-2 left-2 absolute"
+        >
+          Annuler
+        </button>
+        <button
+          onClick={() => {
+            deleteUser(userToDelete);
+            setUserToDelete(null);
+            setShowModal(!showModal);
+          }}
+          className="btn btn-error bottom-2 right-2 absolute"
+        >
+          supprimer
+        </button>
+      </div>
     </div>
   );
 };

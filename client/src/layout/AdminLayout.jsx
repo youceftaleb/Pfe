@@ -37,6 +37,11 @@ const AdminLayout = () => {
                 Parents d'eleve
               </div>
             </Link>
+            <Link to={"/admin/dashboard/demandes"}>
+              <div className="btn btn-ghost text-xl w-full">
+                Demandes
+              </div>
+            </Link>
           </div>
         </aside>
         <Outlet />

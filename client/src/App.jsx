@@ -5,6 +5,7 @@ import {
   PrivateRoute,
   EnseignantForm,
   UsersTable,
+  EnseignantInfo,
 } from "./components";
 import EnseignantAccountLayout from "./layout/EnseignantAccountLayout";
 import Enseignant from "./views/Enseignant";
@@ -53,8 +54,20 @@ export const router = createBrowserRouter([
         element: <UsersTable />,
       },
       {
+        path: "enseignants/:id",
+        element: <EnseignantInfo />,
+      },
+      {
+        path: "enseignants/modifier/:id",
+        element: <h1>modification page</h1>,
+      },
+      {
         path: "parents",
         element: <UsersTable />,
+      },
+      {
+        path: "demandes",
+        element: <h1 className="text-xl">Demandes</h1>,
       },
     ],
   },

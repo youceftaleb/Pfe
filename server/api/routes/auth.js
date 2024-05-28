@@ -8,8 +8,5 @@ module.exports = () => {
     router.post('/register/parent', AuthController.registerParent)
     // * login
     router.post('/login', AuthController.login)
-    // * google auth
-    // router.post('/google', AuthController.googleAuth)//TODO: decide to keep it or not
-
     return router;
 }

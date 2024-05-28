@@ -9,5 +9,9 @@ module.exports = () => {
     router.get('/enseignants', checkLogin, checkAdmin, AdminController.getEnseignants)
     // get parents
     router.get('/parents', checkLogin, checkAdmin, AdminController.getParents)
+    // toggle activate account status
+    router.put("/active/:id", checkLogin, checkAdmin, AdminController.toggleActive)
+    // delete user account
+    router.delete('/delete/:id', checkLogin, checkAdmin, AdminController.deleteUser)
     return router;
 }
