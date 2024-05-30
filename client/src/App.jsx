@@ -6,6 +6,7 @@ import {
   EnseignantForm,
   UsersTable,
   EnseignantInfo,
+  Cours,
 } from "./components";
 import EnseignantAccountLayout from "./layout/EnseignantAccountLayout";
 import Enseignant from "./views/Enseignant";
@@ -87,6 +88,16 @@ export const router = createBrowserRouter([
         <EnseignantAccountLayout />
       </PrivateRoute>
     ),
+    children: [
+      {
+        path: "cours",
+        element: <Cours />,
+      },
+      {
+        path: "demandes",
+        element: <h1 className="text-2xl">demandes de cours</h1>,
+      },
+    ],
   },
   {
     path: "/enseignant/:id",
