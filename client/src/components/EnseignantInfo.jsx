@@ -1,25 +1,22 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import httpCommon from "../utils/http-common";
 import { useEffect, useState } from "react";
-
+import { format, register } from "timeago.js";
+import fr from "timeago.js/lib/lang/fr";
+import { Comments, Cours } from "../components";
 
 function f(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
-
 export const EnseignantInfo = () => {
+  register("mylocal", fr);
   const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [avis, setAvis] = useState(null);
+
   useEffect(() => {
     httpCommon.get(`/user/${id}`).then((res) => {
       setUser(res.data.data);
-      httpCommon
-        .get(`/avis/${user._id}`)
-        .then((res) => setAvis(res.data.data))
-        .catch((err) => console.log(err));
     });
   }, []);
   return (
@@ -45,7 +42,7 @@ export const EnseignantInfo = () => {
         </div>
         <div>
           <h1 className="text-5xl font-bold">{user?.userName}</h1>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="text-yellow-500 w-9 h-auto fill-current"
@@ -54,7 +51,7 @@ export const EnseignantInfo = () => {
               <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
             </svg>
             <span className="text-2xl ml-2">{user?.avis}</span>
-          </div>
+          </div> */}
           {user?.experience > 0 ? (
             <p>{user?.experience} ans d'experience</p>
           ) : (
@@ -97,7 +94,7 @@ export const EnseignantInfo = () => {
             </tr>
           </thead>
           <tbody>
-            {user?.availability.map((obj, index) => (
+            {user?.disponibilite.map((obj, index) => (
               <tr className="hover" key={index}>
                 <td>{obj.dayName}</td>
                 <td>{obj.startTime}</td>
@@ -107,6 +104,10 @@ export const EnseignantInfo = () => {
           </tbody>
         </table>
       </div>
+
+      <Cours cours={user?.cours} add={false} />
+
+      <Comments />
     </div>
   );
 };

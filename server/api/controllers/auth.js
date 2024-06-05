@@ -6,16 +6,17 @@ const jwt = require("jsonwebtoken");
 
 exports.registerEnseignant = async (req, res) => {
     try {
-        const { email, password, userName, experience, modules, availability, CV, identity } = req.body;
+        console.log(req.body);
+        const { email, password, userName, experience, modules, disponibilite, CV, identite, adresse } = req.body;
         // ! form validation server side
         if (
-            !(email && password && userName && experience && availability && modules && CV && identity) //TODO: handle CV file
+            !(email && password && userName && experience && disponibilite && modules && CV && identite && adresse) //TODO: handle CV file
         ) {
-            return res.status(400).send({ message: "all input are required" });
+            return res.status(400).send({ message: "tout champs requis" });
         }
         // ? does user already exist ?
         if (await Enseignant.findOne({ email }) || await Parent.findOne({ email })) {
-            return res.status(409).send({ message: "User ALeready exists, Please login" });
+            return res.status(409).send({ message: "Utilisateur exist deja" });
         }
 
         // ! Encrypt user password
@@ -25,7 +26,7 @@ exports.registerEnseignant = async (req, res) => {
             ...req.body, //TODO: modify to handle CV
             password: encryptedPassword
         });
-        res.status(201).json({ message: "User created successfully", data: savedUser })
+        res.status(201).json({ message: "Utilisateur creer avec succes", data: savedUser })
     } catch (err) {
         res.status(err.status || 500).send({ message: err.message || 'Somethig went wrong' });
     }
@@ -37,12 +38,12 @@ exports.registerParent = async (req, res) => {
 
         // ! form validation server side
         if (!(email && password && userName)) {
-            return res.status(400).send({ message: "all input are required" });
+            return res.status(400).send({ message: "tout champs requis" });
         }
 
         // ? does user already exist ?
         if (await Enseignant.findOne({ email }) || await Parent.findOne({ email })) {
-            return res.status(409).send({ message: "User ALeready exists, Please login" });
+            return res.status(409).send({ message: "Utilisateur exist deja" });
         }
 
         // ! Encrypt user password
@@ -53,7 +54,7 @@ exports.registerParent = async (req, res) => {
             password: encryptedPassword,
             userName,
         });
-        res.status(201).json({ message: "User created successfully", data: savedUser })
+        res.status(201).json({ message: "Utilisateur creer avec succes", data: savedUser })
     } catch (err) {
         res.status(err.status || 500).send({ message: err.message || 'Somethig went wrong' });
     }
@@ -65,7 +66,7 @@ exports.login = async (req, res) => {
         const { email, password } = req.body;
         // validate user input
         if (!(email && password)) {
-            return res.status(400).send({ message: "All input are required" });
+            return res.status(400).send({ message: "tout champs requis" });
         }
         // check if user exists in our database
         let user = await Admin.findOne({ email });
@@ -75,7 +76,7 @@ exports.login = async (req, res) => {
                 user = await Enseignant.findOne({ email });
                 if (!user) return res.status(404).send({ message: "Utilisateur n'existe pas svp creer un compte" })
                 if (user?.activated === false) {
-                    return res.status(403).send({ message: "Admin hasn't activated your account yet" })
+                    return res.status(403).send({ message: "Ce compte n'est pas encore activer par l'Admin" })
                 }
             }
         }
@@ -91,38 +92,10 @@ exports.login = async (req, res) => {
             // response
             res.status(200).send({ message: 'logged in successfully', data: userWithoutPassword, token, type })
         } else {
-            res.status(409).send({ message: "incorrect email or password" });
+            res.status(409).send({ message: "email ou mot de passe incorrecte" });
         }
     } catch (err) {
         res.status(err.status || 500).send({ message: err.message || 'Something went wrong' });
     }
 };
 
-exports.googleAuth = async (req, res) => {
-    try {
-        let user = await Parent.findOne({ email: req.body.email });
-        if (!user) await Enseignant.findOne({ email: req.body.email })
-        if (user) {
-            const token = jwt.sign({ user_id: user._id }, process.env.TOKEN_KEY);
-            res.status(200).send({ message: 'logged in successfully', data: user._doc, token })
-        } else {
-            const newUser = new User({ ...req.body, fromGoogle: true })
-            const savedUser = await newUser.save()
-            const token = jwt.sign({ user_id: savedUser._id }, process.env.TOKEN_KEY);
-            res.status(200).send({ message: 'logged in successfully', data: savedUser._doc, token })
-        }
-    } catch (err) {
-        res.status(err.status || 500).send({ message: err.message || 'Something went wrong' });
-    }
-}
-
-
-// getting user account
-// todo later
-// exports.account = async (req, res) => {
-//     if (req.user) {
-//         await res.json({ user: req.user });
-//     } else {
-//         await res.json({ user: null });
-//     }
-// };

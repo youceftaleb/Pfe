@@ -52,7 +52,6 @@ export const UsersTable = () => {
 
             {type === "enseignants" && (
               <>
-                <th>Avis</th>
                 <th>CV</th>
                 <th>Piece d'indentite</th>
               </>
@@ -65,12 +64,15 @@ export const UsersTable = () => {
             ? users.map((obj, index) => (
                 <tr className="hover" key={index}>
                   <td>
-                    <img src={obj.profilePic} alt={obj.userName} />
+                    <img
+                      className="mr-2 w-10 h-10 rounded-full"
+                      src={obj.profilePic}
+                      alt={obj.userName}
+                    />
                   </td>
                   <td>{obj.userName}</td>
                   <td>{obj.email}</td>
                   <td>
-                    
                     <button
                       onClick={() => {
                         document.getElementById("my_modal_1").showModal();
@@ -88,12 +90,15 @@ export const UsersTable = () => {
                 <tr className="hover" key={index}>
                   <td>
                     <Link to={`/admin/dashboard/enseignants/${obj._id}`}>
-                      <img src={obj.profilePic} alt={obj.userName} />
+                      <img
+                        className="mr-2 w-10 h-10 rounded-full"
+                        src={obj.profilePic}
+                        alt={obj.userName}
+                      />
                     </Link>
                   </td>
                   <td>{obj.userName}</td>
                   <td>{obj.email}</td>
-                  <td>{obj.avis}</td>
                   <td>
                     <a
                       className="underline hover:text-blue-400"

@@ -20,9 +20,9 @@ export const signUpParent = ({ userName, email, password }) => {
         })
 }
 
-export const signUpEnseignant = ({ email, password, userName, CV, days, experience, identity, modules }) => {
+export const signUpEnseignant = ({ email, password, userName, CV, days, experience, identite, modules, adresse }) => {
     httpCommon
-        .post("/auth/register/enseignant", { email, password, userName, CV, experience, modules, identity, availability: days })
+        .post("/auth/register/enseignant", { email, password, userName, CV, experience, modules, identite, disponibilite: days, adresse })
         .then(res => { if (res.status === 201) { successNotification(res.data.message) } })
         .catch(err => {
             if (err.response.status === 409) {

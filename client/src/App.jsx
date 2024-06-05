@@ -7,6 +7,10 @@ import {
   UsersTable,
   EnseignantInfo,
   Cours,
+  Demandes,
+  Disponibilite,
+  Error,
+  ParentDemandes,
 } from "./components";
 import EnseignantAccountLayout from "./layout/EnseignantAccountLayout";
 import Enseignant from "./views/Enseignant";
@@ -17,7 +21,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    errorElement: <div>Home error</div>,
+    errorElement: <Error />,
   },
   {
     path: "/login",
@@ -34,10 +38,12 @@ export const router = createBrowserRouter([
       {
         path: "enseignant",
         element: <EnseignantForm />,
+        errorElement: <Error />,
       },
       {
         path: "parent",
         element: <ParentForm />,
+        errorElement: <Error />,
       },
     ],
   },
@@ -53,10 +59,12 @@ export const router = createBrowserRouter([
       {
         path: "enseignants",
         element: <UsersTable />,
+        errorElement: <Error />,
       },
       {
         path: "enseignants/:id",
         element: <EnseignantInfo />,
+        errorElement: <Error />,
       },
       {
         path: "enseignants/modifier/:id",
@@ -65,10 +73,12 @@ export const router = createBrowserRouter([
       {
         path: "parents",
         element: <UsersTable />,
+        errorElement: <Error />,
       },
       {
         path: "demandes",
         element: <h1 className="text-xl">Demandes</h1>,
+        errorElement: <Error />,
       },
     ],
   },
@@ -79,7 +89,11 @@ export const router = createBrowserRouter([
         <FilterPage />
       </PrivateRoute>
     ),
-    errorElement: <div>dashboard error</div>,
+    errorElement: <Error />,
+  },
+  {
+    path: "/parent/dashboard/demandes",
+    element: <ParentDemandes />,
   },
   {
     path: "/enseignant/dashboard",
@@ -92,10 +106,17 @@ export const router = createBrowserRouter([
       {
         path: "cours",
         element: <Cours />,
+        errorElement: <Error />,
       },
       {
         path: "demandes",
-        element: <h1 className="text-2xl">demandes de cours</h1>,
+        element: <Demandes />,
+        errorElement: <Error />,
+      },
+      {
+        path: "disponibilite",
+        element: <Disponibilite />,
+        errorElement: <Error />,
       },
     ],
   },

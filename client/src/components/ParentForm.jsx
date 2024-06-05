@@ -36,7 +36,7 @@ export const ParentForm = () => {
       </div>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Name</span>
+          <span className="label-text">Nom</span>
         </label>
         <input
           type="text"
@@ -55,7 +55,7 @@ export const ParentForm = () => {
       </div>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Password</span>
+          <span className="label-text">Mot de passe</span>
         </label>
         <input
           type="password"
@@ -71,14 +71,6 @@ export const ParentForm = () => {
         {errors?.password ? (
           <p className="text-red-500">{errors.password.message}</p>
         ) : null}
-        <label className="label">
-          <Link
-            to={"/login"}
-            className="label-text-alt link link-hover hover:underline"
-          >
-            Already have an account?
-          </Link>
-        </label>
       </div>
       <div className="form-control mt-6">
         <button className="btn btn-primary">Sign up</button>

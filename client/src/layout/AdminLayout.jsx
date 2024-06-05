@@ -9,7 +9,7 @@ const AdminLayout = () => {
         <div className="navbar-start">
           <div className="btn btn-ghost text-xl">
             <span className="text-orange-600 -mr-2 font-bold text-3xl">A</span>
-            dmin Panel
+            dmin Dashboard
           </div>
         </div>
         <div className="navbar-end">
@@ -35,11 +35,6 @@ const AdminLayout = () => {
             <Link to={"/admin/dashboard/parents"}>
               <div className="btn btn-ghost text-xl w-full">
                 Parents d'eleve
-              </div>
-            </Link>
-            <Link to={"/admin/dashboard/demandes"}>
-              <div className="btn btn-ghost text-xl w-full">
-                Demandes
               </div>
             </Link>
           </div>

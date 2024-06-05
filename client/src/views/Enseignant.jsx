@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import httpCommon from "../utils/http-common";
-import { Comments } from "../components";
+import { Comments, Cours } from "../components";
+import { useForm } from "react-hook-form";
+// import { createIndexes } from "../../../server/api/models/Enseignant"; //TODO: sldkalles
 
 function f(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -10,17 +12,29 @@ function f(min, max) {
 const Enseignant = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
-  const [avis, setAvis] = useState(null);
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data) => {
+    const result =
+      "Nom d'eleve: " +
+      data.nom +
+      "\nNiveau de l'eleve: " +
+      data.niveau +
+      "\nContact: " +
+      data.contact +
+      "\nMessage: " +
+      data.message;
+    httpCommon
+      .post(`/demande/${id}`, { message: result })
+      .then((res) => (res.status === 200 ? location.reload() : null))
+      .catch((err) => console.log(err.message));
+  };
   useEffect(() => {
     httpCommon.get(`/user/${id}`).then((res) => {
       setUser(res.data.data);
-      httpCommon
-        .get(`/avis/${user._id}`)
-        .then((res) => setAvis(res.data.data))
-        .catch((err) => console.log(err));
     });
   }, []);
-  return user ? (
+  const type = localStorage.getItem("user_type");
+  return (
     <>
       <div
         style={{
@@ -39,61 +53,85 @@ const Enseignant = () => {
         <div className="flex-col flex items-center lg:flex-row gap-6 lg:justify-center">
           <div className="avatar text-center">
             <div className="w-40 rounded-full">
-              <img src={user.profilePic} />
+              <img src={user?.profilePic} />
             </div>
           </div>
           <div>
-            <h1 className="text-5xl font-bold">{user.userName}</h1>
+            <h1 className="text-5xl font-bold">{user?.userName}</h1>
             <span className="text-xl mr-2">modules:</span>
-            {user.modules.map((obj, index) => (
-              <div className="mr-2 badge badge-outline">{obj}</div>
+            {user?.modules.map((obj, index) => (
+              <div key={index} className="mr-2 badge badge-outline">
+                {obj}
+              </div>
             ))}
+            {/* <div className="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-yellow-500 w-9 h-auto fill-current"
+                viewBox="0 0 16 16"
+              >
+                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+              </svg>
+              <span className="text-2xl ml-2">{user?.avis}</span>
+            </div> */}
+            {user?.experience > 0 ? (
+              <p>{user?.experience} ans d'experience</p>
+            ) : (
+              <p>pas d'experience</p>
+            )}
+
+            <a target="_blank" href={user?.CV} className="underline">
+              Cv -&gt;
+            </a>
           </div>
         </div>
+
+        {type === "parent" && (
+          <div className="flex my-4 justify-center">
+            <button
+              onClick={() =>
+                document.getElementById("demande_modal").showModal()
+              }
+              className="btn btn-ghost btn-outline"
+            >
+              Demander ce professeur
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="my-7 flex justify-center">
-        <table className="table w-1/2">
-          <thead>
-            <tr>
-              <th>Jour</th>
-              <th>Debut</th>
-              <th>Fin</th>
-            </tr>
-          </thead>
-          <tbody>
-            {user.availability.map((obj, index) => (
-              <tr className="hover" key={index}>
-                <td>{obj.dayName}</td>
-                <td>{obj.startTime}</td>
-                <td>{obj.endTime}</td>
+      <h1 className="text-3xl my-4 text-center">disponibilite:</h1>
+      {user?.disponibilite.length > 0 && (
+        <div className="my-7 flex justify-center">
+          <table className="table w-1/2">
+            <thead>
+              <tr>
+                <th>Jour</th>
+                <th>Debut</th>
+                <th>Fin</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {user.disponibilite.map((obj, index) => (
+                <tr className="hover" key={index}>
+                  <td>{obj.dayName}</td>
+                  <td>{obj.startTime}</td>
+                  <td>{obj.endTime}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-      <p className="text-center">cv</p>
+      <h1 className="text-xl text-center">Cours de soutien:</h1>
 
-      <h1 className="text-3xl text-center my-7">Avis:</h1>
-
-      <div className="flex justify-center gap-2 items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="text-yellow-500 w-9 h-auto fill-current"
-          viewBox="0 0 16 16"
-        >
-          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-        </svg>
-        <span className="text-slate-400 font-medium">
-          {user.avis} out of 5 stars
-        </span>
-      </div>
+      <Cours enseignantId={id} />
 
       <Comments />
 
-      <div className="flex justify-center relative top-1/3">
-        {/* This is an example component */}
+      {/* <div className="flex justify-center relative top-1/3">
+        
         <div className="relative grid grid-cols-1 gap-4 p-4 mb-8 border rounded-lg bg-white shadow-lg">
           <div className="relative flex gap-4">
             <img
@@ -337,10 +375,75 @@ const Enseignant = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <dialog id="demande_modal" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <div className="modal-action">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              method="dialog"
+              className="w-full"
+            >
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Nom de l'eleve:</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="nom"
+                  className="input input-bordered w-full mb-3"
+                  required
+                  {...register("nom")}
+                />
+              </label>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Niveau de l'eleve:</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="niveau"
+                  className="input input-bordered w-full mb-3"
+                  required
+                  {...register("niveau")}
+                />
+              </label>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Contact:</span>
+                </div>
+                <input
+                  type="tel"
+                  placeholder="telephone"
+                  className="input input-bordered w-full mb-3"
+                  required
+                  {...register("contact")}
+                />
+              </label>
+              <label className="form-control">
+                <div className="label">
+                  <span className="label-text">Message:</span>
+                </div>
+                <textarea
+                  className="textarea textarea-bordered h-24"
+                  placeholder="Entrer un message..."
+                  required
+                  {...register("message")}
+                ></textarea>
+              </label>
+              <br />
+              <input type="submit" className="btn btn-accent float-right" />
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
-  ) : (
-    <div>not a real user</div>
   );
 };
 

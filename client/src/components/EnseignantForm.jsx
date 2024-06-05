@@ -5,6 +5,7 @@ import { registerEnseignantSchema } from "../helpers/validation";
 import { signUpEnseignant } from "../services/auth";
 import { upload } from "../services/fileStorage";
 import { useState } from "react";
+import { Wilaya } from "../data/wilaya";
 
 export const EnseignantForm = () => {
   const [cv, setCV] = useState(null);
@@ -27,13 +28,14 @@ export const EnseignantForm = () => {
 
   const onSubmit = (data) => {
     //TODO: check if email already exists before file upload
+    console.log(data);
     data.modules = data.modules.split(",");
     data.CV = data.CV[0];
-    data.identity = data.identity[0];
+    data.identite = data.identite[0];
     data.experience = parseInt(data.experience);
-
+  
     // uploading files
-    const files = [data.CV, data.identity];
+    const files = [data.CV, data.identite];
     upload(files)
       .then((results) => {
         // Results contain an array of objects with each file and its corresponding download URL
@@ -47,14 +49,14 @@ export const EnseignantForm = () => {
           if (file === data.CV) {
             // Apply operation for file1
             data.CV = downloadURL;
-          } else if (file === data.identity) {
+          } else if (file === data.identite) {
             // Apply operation for file2
-            data.identity = downloadURL;
+            data.identite = downloadURL;
           }
         });
 
         // Call your other function here if needed
-        signUpEnseignant({...data})
+        signUpEnseignant({ ...data });
       })
       .catch((error) => {
         // Handle errors
@@ -81,7 +83,7 @@ export const EnseignantForm = () => {
       </div>
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Username</span>
+          <span className="label-text">Nom et Prenom</span>
         </label>
         <input
           type="text"
@@ -114,7 +116,7 @@ export const EnseignantForm = () => {
 
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Password</span>
+          <span className="label-text">Mot de passe</span>
         </label>
         <input
           type="password"
@@ -126,19 +128,11 @@ export const EnseignantForm = () => {
         {errors?.password ? (
           <p className="text-red-500">{errors.password.message}</p>
         ) : null}
-        <label className="label">
-          <Link
-            to={"/login"}
-            className="label-text-alt link link-hover hover:underline"
-          >
-            Already have an account?
-          </Link>
-        </label>
       </div>
 
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Number of years of experience</span>
+          <span className="label-text">Nombre d'annees d'experience</span>
         </label>
         <input
           className="input input-bordered"
@@ -153,7 +147,7 @@ export const EnseignantForm = () => {
 
       <label className="form-control w-full max-w-xs">
         <div className="label">
-          <span className="label-text">Upload your CV</span>
+          <span className="label-text">fournir un CV</span>
         </div>
         <input
           {...register("CV")}
@@ -170,14 +164,63 @@ export const EnseignantForm = () => {
           <span className="label-text">fournir piece d'itentite</span>
         </div>
         <input
-          {...register("identity")}
+          {...register("identite")}
           type="file"
           className="file-input file-input-bordered w-full max-w-xs"
         />
-        {errors?.identity ? (
-          <p className="text-red-500">{errors.identity.message}</p>
+        {errors?.identite ? (
+          <p className="text-red-500">{errors.identite.message}</p>
         ) : null}
       </label>
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text">Wilaya</span>
+        </label>
+        <select
+          defaultValue=""
+          className="select select-bordered w-full max-w-xs"
+          {...register("wilaya")}
+        >
+          <option value="" disabled>
+            Wilaya
+          </option>
+          {Wilaya.map((wilaya, index) => (
+            <option value={parseInt(wilaya.Code)} key={index}>
+              {wilaya.Code} - {wilaya.Wilaya}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text">Ville:</span>
+        </label>
+        <input
+          type="text"
+          placeholder="ville"
+          className="input input-bordered"
+          required
+          {...register("ville")}
+        />
+        {errors?.ville ? (
+          <p className="text-red-500">{errors.ville.message}</p>
+        ) : null}
+      </div>
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text">Adresse:</span>
+        </label>
+        <input
+          type="text"
+          placeholder="adresse"
+          className="input input-bordered"
+          required
+          {...register("adresse")}
+        />
+        {errors?.adresse ? (
+          <p className="text-red-500">{errors.adresse.message}</p>
+        ) : null}
+      </div>
 
       {fields.map((day, index) => (
         <div key={day.id}>
@@ -190,7 +233,7 @@ export const EnseignantForm = () => {
                 <input
                   className="input input-bordered w-full max-w-xs"
                   {...field}
-                  placeholder="Day Name"
+                  placeholder="jour"
                 />
                 {errors.days?.[index]?.dayName && (
                   <p className="text-red-500">

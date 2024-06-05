@@ -59,11 +59,13 @@ const enseignantSchema = new mongoose.Schema({
     },
     CV: {
         type: String,
-        required: true
+        required: true,
+        default:"https://youceftaleb.netlify.app/docs/my-resume.pdf"
     },
     identite: {
         type: String,
-        required: true
+        required: true,
+        default:"https://firebasestorage.googleapis.com/v0/b/usthb-pfe-2d21e.appspot.com/o/images.jpeg?alt=media&token=9e87f2b2-c716-477b-b721-6eea8eeae852"
     },
     disponibilite: {
         type: [disponibiliteSchema],

@@ -20,8 +20,38 @@ exports.updateEnseignant = async (req, res) => {
 
 }
 
+exports.addDisponibilite = async (req, res) => {
+    try {
+
+        const { dayName, startTime, endTime } = req.body
+        console.log(req.user);
+        if (req.user.user_type === "parent") return res.status(403).send({ message: "You are not a teacher" })
+        const user = await Enseignant.findByIdAndUpdate(req.user.user_id, { $addToSet: { disponibilite: { dayName, startTime, endTime } } });
+        res.status(200).send({ message: "success" });
+
+    } catch (err) {
+        res.status(err.status || 500).send({ message: err.message || 'Something went wrong' });
+    }
+
+}
+exports.deleteDisponibilite = async (req, res) => {
+    try {
+
+        const { id } = req.params
+        console.log(req.user);
+        if (req.user.user_type === "parent") return res.status(403).send({ message: "You are not a teacher" })
+        const user = await Enseignant.findByIdAndUpdate(req.user.user_id, { $pull: { disponibilite: { _id: id } } });
+        res.status(200).send({ message: "success" });
+
+    } catch (err) {
+        res.status(err.status || 500).send({ message: err.message || 'Something went wrong' });
+    }
+
+}
+
 exports.getProfessors = async (req, res) => {
     try {
+        console.log(req.body);
         const { module, location, disponibilite } = req.body;
 
         let teachers = []
@@ -64,12 +94,10 @@ exports.getProfessors = async (req, res) => {
             if (disponibilite.startTime) {
                 disponibiliteQuery['startTime'] = disponibilite.startTime;
             }
-            console.log("disp", disponibilite);
-            console.log("disp", disponibiliteQuery);
             // Add the disponibilite query to the main query if it has conditions
             if (Object.keys(disponibiliteQuery).length > 0) {
                 // Execute the query
-                query_3 = await Enseignant.find({ activated: true, disponibilite: { $elemMatch: {...disponibiliteQuery} } });
+                query_3 = await Enseignant.find({ activated: true, disponibilite: { $elemMatch: { ...disponibiliteQuery } } });
             }
 
         }
@@ -140,7 +168,7 @@ exports.addCour = async (req, res) => {
 exports.deleteCour = async (req, res) => {
     try {
         const { id } = req.params;
-        await Enseignant.findByIdAndUpdate(req.user.user_id, { $pull: { cour: { _id: id } } })
+        await Enseignant.findByIdAndUpdate(req.user.user_id, { $pull: { cours: { _id: id } } })
         res.status(200).send({ message: 'cour supprimer avec success' })
     } catch (err) {
         res.status(err.status || 500).send({ message: err.message || 'Something went wrong' })

@@ -3,10 +3,11 @@ const Enseignant = require('../models/Enseignant')
 
 exports.addComment = async (req, res) => {
     try {
+        
         if (req.user.user_type !== 'parent') return res.status(403).send({ message: 'only parent are able to comment' })
         const { comment, rating } = req.body;
         const avis = new Avis({
-            parenId: req.user.user_id,
+            parentId: req.user.user_id,
             enseignantId: req.params.enseignantId,
             comment,
             rating

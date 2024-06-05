@@ -5,7 +5,11 @@ const checkLogin = require('../middlewares/checkLogin')
 
 module.exports = () => {
     // get Professors
-    router.get('/', EnseignantController.getProfessors)
+    router.post('/', EnseignantController.getProfessors)
+    // ajouter a la liste de disponibilite
+    router.post('/disp', checkLogin, EnseignantController.addDisponibilite)
+    // supprimer disponibilite
+    router.post('/disp/:id',checkLogin,EnseignantController.deleteDisponibilite)
     // update
     router.put('/:id', checkLogin, EnseignantController.updateEnseignant)
     // add cour de soutien

@@ -20,7 +20,7 @@ export const registerEnseignantSchema = yup.object({
         .test('fileType', 'image or pdf files only', (value) => {
             return value && ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'].includes(value[0]?.type);
         }),
-    identity: yup.mixed()
+    identite: yup.mixed()
         .test("required", "this file is required", (value) => {
             return !!value[0]
         })

@@ -48,45 +48,34 @@ export function Navbar() {
           </ul>
         </div>
         <Link to={"/"} className="btn btn-ghost text-xl">
-         <span className="text-orange-600 font-bold text-3xl">O</span>ustadi
+          <span className="text-orange-600 font-bold text-3xl">O</span>ustadi
         </Link>
       </div>
-      <div className="navbar-center hidden lg:flex ">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <a>Home</a>
-          </li>
-          <li>
-            <details>
-              <summary>Our services</summary>
-              <ul className="p-2">
-                <li>
-                  <a>Service 1</a>
-                </li>
-                <li>
-                  <a>Service 2</a>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <a>Contact</a>
-          </li>
-        </ul>
-      </div>
+
       {currentUser ? (
-        <div
-          onClick={() => {
-            dispatch(logout());
-            localStorage.removeItem("token");
-            localStorage.removeItem("user_type");
-            window.location = "/";
-          }}
-          className="avatar navbar-end"
-        >
-          <div className="w-10 rounded">
-            <img src={currentUser.profilePic} />
-          </div>
+        <div className="avatar navbar-end">
+          <details className="dropdown dropdown-end dropdown-bottom">
+            <summary className="m-1 btn">
+              <div className="w-10 rounded">
+                <img src={currentUser.profilePic} />
+              </div>
+            </summary>
+            <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+              <li>
+                <Link to={'/parent/dashboard/demandes'}>mes Demandes</Link>
+              </li>
+              <li
+                onClick={() => {
+                  dispatch(logout());
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("user_type");
+                  window.location = "/";
+                }}
+              >
+                <a className="text-error">Logout</a>
+              </li>
+            </ul>
+          </details>
         </div>
       ) : (
         <div className="navbar-end">

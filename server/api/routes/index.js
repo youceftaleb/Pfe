@@ -5,6 +5,7 @@ const enseignantRoutes = require('./enseignant')
 const userRoutes = require('./user')
 const avisRoutes = require('./avis')
 const adminRoutes = require('./admin')
+const demandeRoutes = require('./demande')
 
 module.exports = () => {
     router.use("/auth", authRoutes())
@@ -12,5 +13,6 @@ module.exports = () => {
     router.use('/user', userRoutes())
     router.use('/avis', avisRoutes())
     router.use('/admin', adminRoutes())
+    router.use('/demande', demandeRoutes())
     return router;
 }

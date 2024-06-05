@@ -1,8 +1,9 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userReducer";
 import { Link, Outlet } from "react-router-dom";
 
 const EnseignantAccountLayout = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   return (
     <>
@@ -37,6 +38,12 @@ const EnseignantAccountLayout = () => {
             </Link>
             <Link to={"/enseignant/dashboard/demandes"}>
               <div className="btn btn-ghost text-xl w-full">Demandes</div>
+            </Link>
+            <Link to={"/enseignant/dashboard/disponibilite"}>
+              <div className="btn btn-ghost text-xl w-full">Disponibilite</div>
+            </Link>
+            <Link to={`/enseignant/${currentUser._id}`}>
+              <div className="btn btn-ghost text-xl w-full">Mon Profil</div>
             </Link>
           </div>
         </aside>

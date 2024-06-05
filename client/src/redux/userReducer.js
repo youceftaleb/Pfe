@@ -8,6 +8,9 @@ export const userSlice = createSlice({
         error: false
     },
     reducers: {
+        addCour: (state, { payload }) => {
+            state.currentUser.cour.push(payload);
+        },
         setUser: (state, { payload }) => {
             state.currentUser = payload;
         },
@@ -32,6 +35,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { loginStart, loginSuccess, loginError, logout, setUser } = userSlice.actions;
+export const { loginStart, loginSuccess, loginError, logout, addCour, setUser } = userSlice.actions;
 
 export default userSlice.reducer;
